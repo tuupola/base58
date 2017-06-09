@@ -2,7 +2,7 @@
     "name": "tuupola/base58",
     "description": "Base58 encoder and decoder for arbitrary data",
     "keywords": [
-        "base62"
+        "base58"
     ],
     "homepage": "https://github.com/tuupola/base58",
     "license": "MIT",
