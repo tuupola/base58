@@ -43,7 +43,7 @@ $string = $base58->encode("987654321"); /* gE62MGeOBMPt */
 
 ## Character sets
 
-By default Base58 uses GMP style character set. Shortcuts are provided for Bitcoin, Flickr, Ripple and IPFS character set. You can also use any custom 58 characters.
+By default Base58 uses GMP style character set. Shortcuts are provided for [Bitcoin](https://github.com/bitcoin/bitcoin/blob/master/src/base58.cpp), [Flickr](https://www.flickr.com/groups/api/discuss/72157616713786392/), [Ripple](https://wiki.ripple.com/Accounts) and [IPFS](https://github.com/richardschneider/net-ipfs-core#base58) character sets. You can also use any custom 58 characters.
 
 ```php
 use Tuupola\Base58;
