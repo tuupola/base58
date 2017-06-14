@@ -84,8 +84,8 @@ If you prefer to use static syntax use the provided static proxy.
 ``` php
 use Tuupola\Base58Proxy as Base58;
 
-$encoded = $base58::encode(random_bytes(128));
-$decoded = $base58::decode($encoded);
+$encoded = Base58::encode(random_bytes(128));
+$decoded = Base58::decode($encoded);
 ```
 
 ## Testing
