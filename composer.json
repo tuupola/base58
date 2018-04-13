@@ -17,6 +17,9 @@
     "require": {
         "php" : "^5.5 || ^7.0"
     },
+    "suggest": {
+        "ext-gmp": "It will speed up the string encoding."
+    },
     "autoload": {
         "psr-4": {
             "Tuupola\\": "src"
@@ -29,7 +32,7 @@
     },
     "require-dev": {
         "squizlabs/php_codesniffer": "^2.5",
-        "phpunit/phpunit": "^4.8",
+        "phpunit/phpunit": "^4.8 || ^5.5 || ^6.5",
         "paragonie/random_compat": "^2.0",
         "phpbench/phpbench": "^0.13.0",
         "overtrue/phplint": "^0.2.4"
