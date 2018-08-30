@@ -17,8 +17,9 @@ namespace Tuupola\Base58;
 
 use Tuupola\Base58;
 use Tuupola\Base58Proxy;
+use PHPUnit\Framework\TestCase;
 
-class Base58Test extends \PHPUnit_Framework_TestCase
+class Base58Test extends TestCase
 {
 
     public function testShouldBeTrue()
