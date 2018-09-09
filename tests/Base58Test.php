@@ -172,4 +172,27 @@ class Base58Test extends TestCase
         $this->assertEquals($encoded5, "2NEpo7TZRhna7vSvL");
         $this->assertEquals($data, $decoded5);
     }
+
+    /**
+     * @dataProvider zeroPrefixProvider
+     */
+    public function testEncodingAZeroBitStream($data)
+    {
+        $bcEncoder = new BcmathEncoder();
+        $gmpEncoder = new GmpEncoder();
+        $phpEncoder = new PhpEncoder();
+        $this->assertSame($data, $bcEncoder->decode($bcEncoder->encode($data)));
+        $this->assertSame($data, $gmpEncoder->decode($gmpEncoder->encode($data)));
+        $this->assertSame($data, $phpEncoder->decode($phpEncoder->encode($data)));
+    }
+    public function zeroPrefixProvider()
+    {
+        return [
+            "no leading zero bytes" => ["\x01"],
+            "single zero byte" => ["\x00"],
+            "multiple zero bytes" => ["\x00\x00"],
+            "single zero byte prefix" => ["\x00\x01"],
+            "multiple zero byte prefix" => ["\x00\x00\x00\x01"]
+        ];
+    }
 }
