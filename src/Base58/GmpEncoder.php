@@ -68,10 +68,10 @@ class GmpEncoder
 
             // gmp_init() cannot cope with a zero-length string
             if ("" === $hex) {
-                return str_repeat(Base58::GMP[0], $leadZeroBytes);
+                $base58 = str_repeat(Base58::GMP[0], $leadZeroBytes);
+            } else {
+                $base58 = str_repeat(Base58::GMP[0], $leadZeroBytes) . gmp_strval(gmp_init($hex, 16), 58);
             }
-
-            $base58 = str_repeat(Base58::GMP[0], $leadZeroBytes) . gmp_strval(gmp_init($hex, 16), 58);
         }
 
         if (Base58::GMP === $this->options["characters"]) {

@@ -189,13 +189,45 @@ class Base58Test extends TestCase
      */
     public function testEncodingAZeroBitStream($data)
     {
-        $bcEncoder = new BcmathEncoder();
-        $gmpEncoder = new GmpEncoder();
-        $phpEncoder = new PhpEncoder();
-        $this->assertSame($data, $bcEncoder->decode($bcEncoder->encode($data)));
-        $this->assertSame($data, $gmpEncoder->decode($gmpEncoder->encode($data)));
-        $this->assertSame($data, $phpEncoder->decode($phpEncoder->encode($data)));
+        $encoded = (new PhpEncoder)->encode($data);
+        $encoded2 = (new GmpEncoder)->encode($data);
+        $encoded3 = (new BcmathEncoder)->encode($data);
+
+        $decoded = (new PhpEncoder)->decode($encoded);
+        $decoded2 = (new GmpEncoder)->decode($encoded2);
+        $decoded3 = (new BcmathEncoder)->decode($encoded2);
+
+        $this->assertEquals($decoded2, $decoded);
+        $this->assertEquals($decoded3, $decoded);
+
+        $this->assertEquals($data, $decoded);
+        $this->assertEquals($data, $decoded2);
+        $this->assertEquals($data, $decoded3);
     }
+
+         /**
+     * @dataProvider zeroPrefixProvider
+     */
+    public function testEncodingAZeroBitStreamWithCustomCharacterSet($data)
+    {
+        $characters = "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuv";
+
+        $encoded = (new PhpEncoder(["characters" => $characters]))->encode($data);
+        $encoded2 = (new GmpEncoder(["characters" => $characters]))->encode($data);
+        $encoded3 = (new BcmathEncoder(["characters" => $characters]))->encode($data);
+
+        $decoded = (new PhpEncoder(["characters" => $characters]))->decode($encoded);
+        $decoded2 = (new GmpEncoder(["characters" => $characters]))->decode($encoded2);
+        $decoded3 = (new BcmathEncoder(["characters" => $characters]))->decode($encoded2);
+
+        $this->assertEquals($encoded, $encoded2);
+        $this->assertEquals($encoded, $encoded3);
+
+        $this->assertEquals($data, $decoded);
+        $this->assertEquals($data, $decoded2);
+        $this->assertEquals($data, $decoded3);
+    }
+
     public function zeroPrefixProvider()
     {
         return [
