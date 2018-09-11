@@ -10,6 +10,8 @@ All notable changes to this project will be documented in this file, in reverse 
 ### Removed
 - Support for PHP 5.5.
 
+### Added
+- Implicit `decodeInteger()` and `encodeInteger()` methods.
 
 ## 0.1.0 - 2017-07-09
 

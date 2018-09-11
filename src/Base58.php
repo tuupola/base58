@@ -44,4 +44,13 @@ class Base58
     {
         return $this->encoder->decode($data, $integer);
     }
+
+    public function encodeInteger($data)
+    {
+        return $this->encoder->encodeInteger($data);
+    }
+    public function decodeInteger($data)
+    {
+        return $this->encoder->decodeInteger($data);
+    }
 }

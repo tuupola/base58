@@ -34,6 +34,13 @@ $integer = $base58->encode(987654321); /* 1TFvCj */
 print $base58->decode("1TFvCj", true); /* 987654321 */
 ```
 
+If you prefer you can also use the implicit `decodeInteger()` method.
+
+``` php
+$integer = $base58->encode(987654321); /* 1TFvCj */
+print $base58->decodeInteger("1TFvCj"); /* 987654321 */
+```
+
 Also note that encoding a string and an integer will yield different results.
 
 ``` php
