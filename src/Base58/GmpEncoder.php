@@ -57,10 +57,10 @@ class GmpEncoder
 
             // gmp_init() cannot cope with a zero-length string
             if ("" === $hex) {
-                return str_repeat($this->options["characters"][0], $leadZeroBytes);
+                return str_repeat(Base58::GMP[0], $leadZeroBytes);
             }
 
-            $base58 = str_repeat($this->options["characters"][0], $leadZeroBytes) . gmp_strval(gmp_init($hex, 16), 58);
+            $base58 = str_repeat(Base58::GMP[0], $leadZeroBytes) . gmp_strval(gmp_init($hex, 16), 58);
         }
 
         if (Base58::GMP === $this->options["characters"]) {
@@ -81,7 +81,7 @@ class GmpEncoder
         }
 
         $leadZeroBytes = 0;
-        while ("" !== $data && 0 === strpos($data, $this->options["characters"][0])) {
+        while ("" !== $data && 0 === strpos($data, Base58::GMP[0])) {
             $leadZeroBytes++;
             $data = substr($data, 1);
         }
