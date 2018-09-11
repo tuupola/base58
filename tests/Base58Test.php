@@ -195,4 +195,23 @@ class Base58Test extends TestCase
             "multiple zero byte prefix" => ["\x00\x00\x00\x01"]
         ];
     }
+
+    public function testBug1()
+    {
+        $decoded = (new PhpEncoder(["characters" => Base58::BITCOIN]))->decode("1gbCKFk");
+        $decoded2 = (new GmpEncoder(["characters" => Base58::BITCOIN]))->decode("1gbCKFk");
+        $decoded3 = (new BcmathEncoder(["characters" => Base58::BITCOIN]))->decode("1gbCKFk");
+
+        $this->assertEquals($decoded, $decoded);
+        $this->assertEquals($decoded, $decoded2);
+        $this->assertEquals($decoded, $decoded3);
+
+        $encoded = (new PhpEncoder(["characters" => Base58::BITCOIN]))->encode($decoded);
+        $encoded2 = (new GmpEncoder(["characters" => Base58::BITCOIN]))->encode($decoded2);
+        $encoded3 = (new BcmathEncoder(["characters" => Base58::BITCOIN]))->encode($decoded2);
+
+        $this->assertEquals("1gbCKFk", $encoded);
+        $this->assertEquals("1gbCKFk", $encoded2);
+        $this->assertEquals("1gbCKFk", $encoded3);
+    }
 }
