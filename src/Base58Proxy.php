@@ -47,14 +47,14 @@ class Base58Proxy
      /**
      * Encode given integer to a base62 string
      */
-    public static function encodeInteger(int $data): string
+    public static function encodeInteger(int $data)
     {
         return (new Base58(self::$options))->encodeInteger($data);
     }
     /**
      * Decode given base62 string back to an integer
      */
-    public static function decodeInteger(string $data): int
+    public static function decodeInteger(string $data)
     {
         return (new Base58(self::$options))->decodeInteger($data);
     }
