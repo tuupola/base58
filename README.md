@@ -26,25 +26,18 @@ $encoded = $base58->encode(random_bytes(128));
 $decoded = $base58->decode($encoded);
 ```
 
-Note that if you are encoding to and from integer you need to pass boolean `true` as the second argument for `decode()` method. This is because `decode()` method does not know if the original data was an integer or binary data.
+If you are encoding to and from integer use the implicit decodeInteger() and encodeInteger() methods.
 
 ``` php
-$integer = $base58->encode(987654321); /* 1TFvCj */
-print $base58->decode("1TFvCj", true); /* 987654321 */
-```
-
-If you prefer you can also use the implicit `decodeInteger()` method.
-
-``` php
-$integer = $base58->encode(987654321); /* 1TFvCj */
-print $base58->decodeInteger("1TFvCj"); /* 987654321 */
+$integer = $base58->encodeInteger(987654321); /* 1TFvCj */
+print $base58->decodeInteger("1TFvCj", true); /* 987654321 */
 ```
 
 Also note that encoding a string and an integer will yield different results.
 
 ``` php
-$integer = $base58->encode(987654321); /* 1TFvCj */
 $string = $base58->encode("987654321"); /* gE62MGeOBMPt */
+$integer = $base58->encodeInteger(987654321); /* 1TFvCj */
 ```
 
 ## Character sets
