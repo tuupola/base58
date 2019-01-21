@@ -120,5 +120,5 @@ abstract class BaseEncoder
         return $this->decode($data, true);
     }
 
-    abstract public function baseConvert(array $source, $source_base, $target_base);
+    abstract public function baseConvert(array $source, $sourceBase, $targetBase);
 }
