@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 /*
 
 Copyright (c) 2017-2019 Mika Tuupola
@@ -35,7 +37,7 @@ class GmpEncoder
         "characters" => Base58::GMP,
     ];
 
-    public function __construct($options = [])
+    public function __construct(array $options = [])
     {
         $this->options = array_merge($this->options, (array) $options);
 
@@ -47,7 +49,7 @@ class GmpEncoder
         }
     }
 
-    public function encode($data)
+    public function encode(string $data): string
     {
         $hex = bin2hex($data);
 
@@ -70,7 +72,7 @@ class GmpEncoder
         return strtr($base58, Base58::GMP, $this->options["characters"]);
     }
 
-    public function decode($data)
+    public function decode(string $data): string
     {
         $this->validateInput($data);
 
@@ -102,7 +104,7 @@ class GmpEncoder
         return hex2bin(str_repeat("00", $leadZeroBytes) . $hex);
     }
 
-    public function encodeInteger($data)
+    public function encodeInteger(int $data): string
     {
         $base58 = gmp_strval(gmp_init($data, 10), 58);
 
@@ -113,7 +115,7 @@ class GmpEncoder
         return strtr($base58, Base58::GMP, $this->options["characters"]);
     }
 
-    public function decodeInteger($data)
+    public function decodeInteger(string $data): int
     {
         $this->validateInput($data);
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 /*
 
 Based on BaseConverter by Anthony Ferrara:
@@ -36,7 +38,7 @@ class PhpEncoder extends BaseEncoder
 {
     /* http://codegolf.stackexchange.com/a/21672 */
 
-    public function baseConvert(array $source, $sourceBase, $targetBase)
+    public function baseConvert(array $source, int $sourceBase, int $targetBase): array
     {
         $result = [];
         while ($count = count($source)) {

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 /*
 
 Copyright (c) 2017-2019 Mika Tuupola
@@ -35,7 +37,7 @@ abstract class BaseEncoder
         "characters" => Base58::GMP,
     ];
 
-    public function __construct($options = [])
+    public function __construct(array $options = [])
     {
         $this->options = array_merge($this->options, (array) $options);
 
@@ -45,7 +47,7 @@ abstract class BaseEncoder
         }
     }
 
-    public function encode($data)
+    public function encode(string $data): string
     {
         $data = str_split($data);
         $data = array_map("ord", $data);
@@ -70,7 +72,7 @@ abstract class BaseEncoder
         }, $converted));
     }
 
-    public function decode($data)
+    public function decode(string $data): string
     {
         $this->validateInput($data);
 
@@ -97,7 +99,7 @@ abstract class BaseEncoder
         return implode("", array_map("chr", $converted));
     }
 
-    public function encodeInteger($data)
+    public function encodeInteger(int $data): string
     {
         $data = [$data];
 
@@ -108,7 +110,7 @@ abstract class BaseEncoder
         }, $converted));
     }
 
-    public function decodeInteger($data)
+    public function decodeInteger(string $data): int
     {
         $this->validateInput($data);
 
@@ -140,5 +142,5 @@ abstract class BaseEncoder
         }
     }
 
-    abstract public function baseConvert(array $source, $sourceBase, $targetBase);
+    abstract public function baseConvert(array $source, int $sourceBase, int $targetBase): array;
 }

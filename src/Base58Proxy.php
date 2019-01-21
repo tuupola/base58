@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 /*
 
 Copyright (c) 2017-2019 Mika Tuupola
@@ -34,27 +36,27 @@ class Base58Proxy
         "characters" => Base58::GMP,
     ];
 
-    public static function encode($data, $options = [])
+    public static function encode(string $data): string
     {
         return (new Base58(self::$options))->encode($data);
     }
 
-    public static function decode($data, $integer = false, $options = [])
+    public static function decode(string $data): string
     {
-        return (new Base58(self::$options))->decode($data, $integer);
+        return (new Base58(self::$options))->decode($data);
     }
 
      /**
      * Encode given integer to a base62 string
      */
-    public static function encodeInteger($data)
+    public static function encodeInteger(int $data): string
     {
         return (new Base58(self::$options))->encodeInteger($data);
     }
     /**
      * Decode given base62 string back to an integer
      */
-    public static function decodeInteger($data)
+    public static function decodeInteger(string $data): int
     {
         return (new Base58(self::$options))->decodeInteger($data);
     }
