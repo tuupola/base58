@@ -6,7 +6,7 @@ Based on BaseConverter by Anthony Ferrara:
 https://github.com/ircmaxell/SecurityLib/tree/master/lib/SecurityLib
 
 Copyright (c) 2011 Anthony Ferrara
-Copyright (c) 2017-2018 Mika Tuupola
+Copyright (c) 2017-2019 Mika Tuupola
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
