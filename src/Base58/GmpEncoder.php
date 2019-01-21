@@ -47,25 +47,21 @@ class GmpEncoder
         }
     }
 
-    public function encode($data, $integer = false)
+    public function encode($data)
     {
-        if (is_integer($data) || true === $integer) {
-            $base58 = gmp_strval(gmp_init($data, 10), 58);
+        $hex = bin2hex($data);
+
+        $leadZeroBytes = 0;
+        while ("" !== $hex && 0 === strpos($hex, "00")) {
+            $leadZeroBytes++;
+            $hex = substr($hex, 2);
+        }
+
+        /* gmp_init() cannot cope with a zero-length string. */
+        if ("" === $hex) {
+            $base58 = str_repeat(Base58::GMP[0], $leadZeroBytes);
         } else {
-            $hex = bin2hex($data);
-
-            $leadZeroBytes = 0;
-            while ("" !== $hex && 0 === strpos($hex, "00")) {
-                $leadZeroBytes++;
-                $hex = substr($hex, 2);
-            }
-
-            /* gmp_init() cannot cope with a zero-length string. */
-            if ("" === $hex) {
-                $base58 = str_repeat(Base58::GMP[0], $leadZeroBytes);
-            } else {
-                $base58 = str_repeat(Base58::GMP[0], $leadZeroBytes) . gmp_strval(gmp_init($hex, 16), 58);
-            }
+            $base58 = str_repeat(Base58::GMP[0], $leadZeroBytes) . gmp_strval(gmp_init($hex, 16), 58);
         }
 
         if (Base58::GMP === $this->options["characters"]) {
@@ -74,12 +70,9 @@ class GmpEncoder
         return strtr($base58, Base58::GMP, $this->options["characters"]);
     }
 
-    public function decode($data, $integer = false)
+    public function decode($data)
     {
-        /* If the data contains characters that aren't in the character set. */
-        if (strlen($data) !== strspn($data, $this->options["characters"])) {
-            throw new InvalidArgumentException("Data contains invalid characters");
-        }
+        $this->validateInput($data);
 
         if (Base58::GMP !== $this->options["characters"]) {
             $data = strtr($data, $this->options["characters"], Base58::GMP);
@@ -106,20 +99,46 @@ class GmpEncoder
             $hex = "0" . $hex;
         }
 
-        /* Return as integer when requested. */
-        if ($integer) {
-            return hexdec($hex);
-        }
         return hex2bin(str_repeat("00", $leadZeroBytes) . $hex);
     }
 
     public function encodeInteger($data)
     {
-        return $this->encode($data, true);
+        $base58 = gmp_strval(gmp_init($data, 10), 58);
+
+        if (Base58::GMP === $this->options["characters"]) {
+            return $base58;
+        }
+
+        return strtr($base58, Base58::GMP, $this->options["characters"]);
     }
 
     public function decodeInteger($data)
     {
-        return $this->decode($data, true);
+        $this->validateInput($data);
+
+        if (Base58::GMP !== $this->options["characters"]) {
+            $data = strtr($data, $this->options["characters"], Base58::GMP);
+        }
+
+        $hex = gmp_strval(gmp_init($data, 58), 16);
+        if (strlen($hex) % 2) {
+            $hex = "0" . $hex;
+        }
+
+        return hexdec($hex);
+    }
+
+    private function validateInput(string $data): void
+    {
+        /* If the data contains characters that aren't in the character set. */
+        if (strlen($data) !== strspn($data, $this->options["characters"])) {
+            $valid = str_split($this->options["characters"]);
+            $invalid = str_replace($valid, "", $data);
+            $invalid = count_chars($invalid, 3);
+            throw new InvalidArgumentException(
+                "Data contains invalid characters \"{$invalid}\""
+            );
+        }
     }
 }
