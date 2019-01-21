@@ -64,16 +64,16 @@ print $bitcoin->encode("Hello world!"); /* 2NEpo7TZRhna7vSvL */
 Install GMP if you can. It is much faster pure PHP encoder. Below benchmarks are for encoding `random_bytes(128)` data. BCMatch encoder is also included but it is mostly just a curiosity. It is too slow to be usable.
 
 ```
-$ composer phpbench
+$ vendor/bin/phpbench run benchmarks/ --report=default
 
-+-----------------------+-----------------+--------------+
-| subject               | mean            | diff         |
-+-----------------------+-----------------+--------------+
-| benchGmpEncoder       | 70,821.530ops/s | 0.00%        |
-| benchGmpEncoderCustom | 64,683.053ops/s | +9.49%       |
-| benchPhpEncoder       | 25.801ops/s     | +274,387.68% |
-| benchBcmathEncoder    | 7.505ops/s      | +943,548.44% |
-+-----------------------+-----------------+--------------+
++-----------------------+------------------+--------------+
+| subject               | mean             | diff         |
++-----------------------+------------------+--------------+
+| benchGmpEncoder       | 101,832.994ops/s | 0.00%        |
+| benchGmpEncoderCustom | 97,656.250ops/s  | +4.28%       |
+| benchPhpEncoder       | 305.913ops/s     | +33,188.19%  |
+| benchBcmathEncoder    | 32.457ops/s      | +313,643.79% |
++-----------------------+------------------+--------------+
 ```
 
 ## Static Proxy
