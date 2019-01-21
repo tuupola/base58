@@ -86,11 +86,6 @@ class GmpEncoder
             $data = substr($data, 1);
         }
 
-        /* Prior to PHP 7.0 substr() returns false instead of the empty string. */
-        if (false === $data) {
-            $data = "";
-        }
-
         /* gmp_init() cannot cope with a zero-length string. */
         if ("" === $data) {
             return str_repeat("\x00", $leadZeroBytes);
@@ -101,7 +96,7 @@ class GmpEncoder
             $hex = "0" . $hex;
         }
 
-        return hex2bin(str_repeat("00", $leadZeroBytes) . $hex);
+        return (string) hex2bin(str_repeat("00", $leadZeroBytes) . $hex);
     }
 
     public function encodeInteger(int $data): string
@@ -128,7 +123,7 @@ class GmpEncoder
             $hex = "0" . $hex;
         }
 
-        return hexdec($hex);
+        return (int) hexdec($hex);
     }
 
     private function validateInput(string $data): void
