@@ -119,12 +119,6 @@ abstract class BaseEncoder
             return strpos($this->options["characters"], $character);
         }, $data);
 
-        $leadingZeroes = 0;
-        while (!empty($data) && 0 === $data[0]) {
-            $leadingZeroes++;
-            array_shift($data);
-        }
-
         $converted = $this->baseConvert($data, 58, 10);
         return (integer) implode("", $converted);
     }
