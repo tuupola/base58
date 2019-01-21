@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
+## [0.2.3](https://github.com/tuupola/base58/compare/0.2.2...0.2.3) - 2019-01-21
+### Fixed
+- Typo in homepage url caused `composer.json` to fail validation
+
 ## [0.2.2](https://github.com/tuupola/base58/compare/0.2.1...0.2.2) - 2019-01-21
 ### Added
 - Improved tests synced from tuupola/base62
