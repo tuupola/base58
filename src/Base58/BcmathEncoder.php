@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 /*
 
 Based on BaseConverter by Anthony Ferrara:
@@ -36,16 +38,18 @@ class BcmathEncoder extends BaseEncoder
 {
     /* http://codegolf.stackexchange.com/a/21672 */
 
-    public function baseConvert(array $source, $source_base, $target_base)
+    public function baseConvert(array $source, $sourceBase, $targetBase)
     {
         $result = [];
         while ($count = count($source)) {
             $quotient = [];
             $remainder = "0";
+            $sourceBase = (string) $sourceBase;
+            $targetBase = (string) $targetBase;
             for ($i = 0; $i !== $count; $i++) {
-                $accumulator = bcadd($source[$i], bcmul($remainder, $source_base));
-                $digit = bcdiv($accumulator, $target_base, 0);
-                $remainder = bcmod($accumulator, $target_base);
+                $accumulator = bcadd((string) $source[$i], bcmul($remainder, $sourceBase));
+                $digit = bcdiv($accumulator, $targetBase, 0);
+                $remainder = bcmod($accumulator, $targetBase);
                 if (count($quotient) || $digit) {
                     array_push($quotient, $digit);
                 };
