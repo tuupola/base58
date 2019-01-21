@@ -375,7 +375,7 @@ class Base58Test extends TestCase
     public function testShouldThrowExceptionWithInvalidCharacterSet()
     {
         $options = [
-            "characters" => "0023456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+            "characters" => "0023456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuv"
         ];
 
         $decoders = [
@@ -398,7 +398,7 @@ class Base58Test extends TestCase
         }
 
         $options = [
-            "characters" => "00123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+            "characters" => "0023456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuv"
         ];
 
 
@@ -553,17 +553,21 @@ class Base58Test extends TestCase
 
     public function testBug1()
     {
-        $decoded = (new PhpEncoder(["characters" => Base58::BITCOIN]))->decode("1gbCKFk");
-        $decoded2 = (new GmpEncoder(["characters" => Base58::BITCOIN]))->decode("1gbCKFk");
-        $decoded3 = (new BcmathEncoder(["characters" => Base58::BITCOIN]))->decode("1gbCKFk");
+        $php = new PhpEncoder(["characters" => Base58::BITCOIN]);
+        $gmp = new GmpEncoder(["characters" => Base58::BITCOIN]);
+        $bcmath = new BcmathEncoder(["characters" => Base58::BITCOIN]);
+
+        $decoded = $php->decode("1gbCKFk");
+        $decoded2 = $gmp->decode("1gbCKFk");
+        $decoded3 = $bcmath->decode("1gbCKFk");
 
         $this->assertEquals($decoded, $decoded);
         $this->assertEquals($decoded, $decoded2);
         $this->assertEquals($decoded, $decoded3);
 
-        $encoded = (new PhpEncoder(["characters" => Base58::BITCOIN]))->encode($decoded);
-        $encoded2 = (new GmpEncoder(["characters" => Base58::BITCOIN]))->encode($decoded2);
-        $encoded3 = (new BcmathEncoder(["characters" => Base58::BITCOIN]))->encode($decoded2);
+        $encoded = $php->encode($decoded);
+        $encoded2 = $gmp->encode($decoded2);
+        $encoded3 = $bcmath->encode($decoded2);
 
         $this->assertEquals("1gbCKFk", $encoded);
         $this->assertEquals("1gbCKFk", $encoded2);
