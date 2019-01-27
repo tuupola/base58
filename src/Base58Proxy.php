@@ -34,25 +34,32 @@ class Base58Proxy
         "characters" => Base58::GMP,
     ];
 
+    /**
+     * Encode given data to a base58 string
+     */
     public static function encode($data, $options = [])
     {
         return (new Base58(self::$options))->encode($data);
     }
 
+    /**
+     * Decode given base58 string back to data
+     */
     public static function decode($data, $integer = false, $options = [])
     {
         return (new Base58(self::$options))->decode($data, $integer);
     }
 
-     /**
-     * Encode given integer to a base62 string
+    /**
+     * Encode given integer to a base58 string
      */
     public static function encodeInteger($data)
     {
         return (new Base58(self::$options))->encodeInteger($data);
     }
+
     /**
-     * Decode given base62 string back to an integer
+     * Decode given base58 string back to an integer
      */
     public static function decodeInteger($data)
     {

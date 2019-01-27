@@ -46,20 +46,33 @@ class Base58
         $this->encoder = new Base58\PhpEncoder($this->options);
     }
 
+    /**
+     * Encode given data to a base58 string
+     */
     public function encode($data)
     {
         return $this->encoder->encode($data);
     }
 
+    /**
+     * Decode given base58 string back to data
+     */
     public function decode($data, $integer = false)
     {
         return $this->encoder->decode($data, $integer);
     }
 
+    /**
+     * Encode given integer to a base58 string
+     */
     public function encodeInteger($data)
     {
         return $this->encoder->encodeInteger($data);
     }
+
+    /**
+     * Decode given base58 string back to an integer
+     */
     public function decodeInteger($data)
     {
         return $this->encoder->decodeInteger($data);

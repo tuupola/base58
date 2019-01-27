@@ -34,8 +34,11 @@ use Tuupola\Base58;
 
 class BcmathEncoder extends BaseEncoder
 {
-    /* http://codegolf.stackexchange.com/a/21672 */
-
+    /**
+     * Convert an integer between artbitrary bases
+     *
+     * @see http://codegolf.stackexchange.com/a/21672
+     */
     public function baseConvert(array $source, $source_base, $target_base)
     {
         $result = [];

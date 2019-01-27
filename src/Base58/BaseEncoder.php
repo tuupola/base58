@@ -45,6 +45,9 @@ abstract class BaseEncoder
         }
     }
 
+    /**
+     * Encode given data to a base58 string
+     */
     public function encode($data, $integer = false)
     {
         if (is_integer($data) || true === $integer) {
@@ -74,6 +77,9 @@ abstract class BaseEncoder
         }, $converted));
     }
 
+    /**
+     * Decode given base58 string back to data
+     */
     public function decode($data, $integer = false)
     {
         /* If the data contains characters that aren't in the character set. */
@@ -110,11 +116,17 @@ abstract class BaseEncoder
         return implode("", array_map("chr", $converted));
     }
 
+    /**
+     * Encode given integer to a base58 string
+     */
     public function encodeInteger($data)
     {
         return $this->encode($data, true);
     }
 
+    /**
+     * Decode given base58 string back to an integer
+     */
     public function decodeInteger($data)
     {
         return $this->decode($data, true);
