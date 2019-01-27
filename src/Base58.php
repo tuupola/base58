@@ -39,7 +39,7 @@ class Base58
     private $encoder;
     private $options = [];
 
-    public function __construct($options = [])
+    public function __construct(array $options = [])
     {
         $this->options = array_merge($this->options, (array) $options);
         if (function_exists("gmp_init")) {
@@ -51,7 +51,7 @@ class Base58
     /**
      * Encode given data to a base58 string
      */
-    public function encode($data)
+    public function encode(string $data): string
     {
         return $this->encoder->encode($data);
     }
@@ -59,15 +59,15 @@ class Base58
     /**
      * Decode given base58 string back to data
      */
-    public function decode($data, $integer = false)
+    public function decode(string $data): string
     {
-        return $this->encoder->decode($data, $integer);
+        return $this->encoder->decode($data);
     }
 
     /**
      * Encode given integer to a base58 string
      */
-    public function encodeInteger($data)
+    public function encodeInteger(int $data): string
     {
         return $this->encoder->encodeInteger($data);
     }
@@ -75,7 +75,7 @@ class Base58
     /**
      * Decode given base58 string back to an integer
      */
-    public function decodeInteger($data)
+    public function decodeInteger(string $data): int
     {
         return $this->encoder->decodeInteger($data);
     }
