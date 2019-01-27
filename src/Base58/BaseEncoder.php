@@ -47,6 +47,9 @@ abstract class BaseEncoder
         }
     }
 
+    /**
+     * Encode given data to a base58 string
+     */
     public function encode(string $data): string
     {
         $data = str_split($data);
@@ -72,6 +75,9 @@ abstract class BaseEncoder
         }, $converted));
     }
 
+    /**
+     * Decode given base58 string back to data
+     */
     public function decode(string $data): string
     {
         $this->validateInput($data);
@@ -99,6 +105,9 @@ abstract class BaseEncoder
         return implode("", array_map("chr", $converted));
     }
 
+    /**
+     * Encode given integer to a base58 string
+     */
     public function encodeInteger(int $data): string
     {
         $data = [$data];
@@ -110,6 +119,9 @@ abstract class BaseEncoder
         }, $converted));
     }
 
+    /**
+     * Decode given base58 string back to an integer
+     */
     public function decodeInteger(string $data): int
     {
         $this->validateInput($data);

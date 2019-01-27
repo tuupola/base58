@@ -49,6 +49,9 @@ class GmpEncoder
         }
     }
 
+    /**
+     * Encode given data to a base58 string
+     */
     public function encode(string $data): string
     {
         $hex = bin2hex($data);
@@ -72,6 +75,9 @@ class GmpEncoder
         return strtr($base58, Base58::GMP, $this->options["characters"]);
     }
 
+    /**
+     * Decode given base58 string back to data
+     */
     public function decode(string $data): string
     {
         $this->validateInput($data);
@@ -99,6 +105,9 @@ class GmpEncoder
         return (string) hex2bin(str_repeat("00", $leadZeroBytes) . $hex);
     }
 
+    /**
+     * Encode given integer to a base58 string
+     */
     public function encodeInteger(int $data): string
     {
         $base58 = gmp_strval(gmp_init($data, 10), 58);
@@ -110,6 +119,9 @@ class GmpEncoder
         return strtr($base58, Base58::GMP, $this->options["characters"]);
     }
 
+    /**
+     * Decode given base58 string back to an integer
+     */
     public function decodeInteger(string $data): int
     {
         $this->validateInput($data);
