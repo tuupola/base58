@@ -37,7 +37,7 @@ class Base58Proxy
     /**
      * Encode given data to a base58 string
      */
-    public static function encode($data, $options = [])
+    public static function encode($data)
     {
         return (new Base58(self::$options))->encode($data);
     }
@@ -45,7 +45,7 @@ class Base58Proxy
     /**
      * Decode given base58 string back to data
      */
-    public static function decode($data, $integer = false, $options = [])
+    public static function decode($data, $integer = false)
     {
         return (new Base58(self::$options))->decode($data, $integer);
     }
