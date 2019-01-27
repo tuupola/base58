@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
+## [0.3.0](https://github.com/tuupola/base58/compare/0.2.2...0.2.3) - 2019-01-27
+### Removed
+- The unused and undocumented second parameter from static proxy methods.
+
 ## [0.2.3](https://github.com/tuupola/base58/compare/0.2.2...0.2.3) - 2019-01-21
 ### Fixed
 - Typo in homepage url caused `composer.json` to fail validation
