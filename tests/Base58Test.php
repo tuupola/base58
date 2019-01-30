@@ -32,6 +32,7 @@ SOFTWARE.
 namespace Tuupola\Base58;
 
 use InvalidArgumentException;
+use RuntimeException;
 use Tuupola\Base58;
 use Tuupola\Base58Proxy;
 use PHPUnit\Framework\TestCase;
@@ -604,11 +605,49 @@ class Base58Test extends TestCase
         $this->assertEquals("1PMycacnJaSqwwJqjawXBErnLsZ7RkXUAs", $encoded4);
         $this->assertEquals("1PMycacnJaSqwwJqjawXBErnLsZ7RkXUAs", $encoded5);
 
-        // $this->assertEquals($data, $php->decode($encoded));
-        // $this->assertEquals($data, $gmp->decode($encoded2));
-        // $this->assertEquals($data, $bcmath->decode($encoded3));
-        // $this->assertEquals($data, $base58->decode($encoded4));
-        // $this->assertEquals($data, Base58Proxy::decode($encoded5));
+        $this->assertEquals($data, $php->decode($encoded));
+        $this->assertEquals($data, $gmp->decode($encoded2));
+        $this->assertEquals($data, $bcmath->decode($encoded3));
+        $this->assertEquals($data, $base58->decode($encoded4));
+        $this->assertEquals($data, Base58Proxy::decode($encoded5));
+    }
+
+    /**
+     * @dataProvider encoderProvider
+     */
+    public function testShouldThrowWithInvalidChecksum($encoder)
+    {
+        $this->expectException(RuntimeException::class);
+
+        $options = [
+            "characters" => Base58::BITCOIN,
+            "check" => true,
+            "version" => 0x00,
+        ];
+
+        //$encoded = "1PMycacnJaSqwwJqjawXBErnLsZ7RkXUAs";
+        $encoded = "1PMycacnJaSqwwJqjawXBErnLsZ7RkXUAS";
+
+        (new $encoder($options))->decode($encoded);
+    }
+
+    /**
+     * @dataProvider encoderProvider
+     */
+    public function testShouldThrowWithInvalidVersion($encoder)
+    {
+        $this->expectException(RuntimeException::class);
+
+        $options = [
+            "characters" => Base58::BITCOIN,
+            "check" => true,
+            "version" => 0x00,
+        ];
+
+        /* This was encoded using version 0x01 */
+        $encoded = "nhabgv51kuimNSvm1GqfN8ZyNp44FGNnC";
+
+        (new $encoder($options))->decode($encoded);
     }
 
     public function characterSetProvider()
@@ -620,6 +659,16 @@ class Base58Test extends TestCase
             "Ripple character set" => [Base58::RIPPLE],
             "IPFS character set" => [Base58::IPFS],
             "custom character set" => ["9876543210ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuv"],
+        ];
+    }
+
+    public function encoderProvider()
+    {
+        return [
+            "PHP encoder" => [PhpEncoder::class],
+            "GMP encoder" => [GmpEncoder::class],
+            "BCMath encoder" => [BcmathEncoder::class],
+            "Base encoder" => [Base58::class],
         ];
     }
 }

@@ -27,6 +27,7 @@ SOFTWARE.
 namespace Tuupola\Base58;
 
 use InvalidArgumentException;
+use RuntimeException;
 use Tuupola\Base58;
 
 class GmpEncoder
@@ -130,7 +131,39 @@ class GmpEncoder
         if ($integer) {
             return hexdec($hex);
         }
-        return hex2bin(str_repeat("00", $leadZeroBytes) . $hex);
+
+        $decoded = hex2bin(str_repeat("00", $leadZeroBytes) . $hex);
+
+        if (true === $this->options["check"]) {
+            $hash = hash("sha256", substr($decoded, 0, -4), true);
+            $hash = hash("sha256", $hash, true);
+            $checksum = substr($hash, 0, 4);
+
+            if (0 !== substr_compare($decoded, $checksum, -4, 4)) {
+                $message = sprintf(
+                    'Checksum "%s" does not match the expected "%s"',
+                    bin2hex(substr($decoded, -4)),
+                    bin2hex($checksum)
+                );
+                throw new RuntimeException($message);
+            }
+
+            $version = substr($decoded, 0, 1);
+            $version = ord($version);
+
+            if ($version !==  $this->options["version"]) {
+                $message = sprintf(
+                    'Version "%s" does not match the expected "%s"',
+                    $version,
+                    $this->options["version"]
+                );
+                throw new RuntimeException($message);
+            }
+
+            $decoded = substr($decoded, 1, -4);
+        }
+
+        return $decoded;
     }
 
     /**
