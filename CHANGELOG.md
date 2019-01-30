@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
-## [0.4.0](https://github.com/tuupola/base58/compare/0.3.0...0.4.0) - unreleased
+## [0.4.0](https://github.com/tuupola/base58/compare/0.3.0...0.4.0) - 2019-01-30
 ### Added
 - The [Base58Check](https://en.bitcoin.it/wiki/Base58Check_encoding) encoding and decoding used in bitcoin addresses.
   ```php
