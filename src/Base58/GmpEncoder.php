@@ -62,7 +62,7 @@ class GmpEncoder
                 $data = chr($this->options["version"]) . $data;
                 $hash = hash("sha256", $data, true);
                 $hash = hash("sha256", $hash, true);
-                $checksum = substr($hash, 0, 4);
+                $checksum = substr($hash, 0, Base58::CHECKSUM_SIZE);
                 $data .= $checksum;
             }
             $hex = bin2hex($data);
@@ -135,20 +135,21 @@ class GmpEncoder
         $decoded = hex2bin(str_repeat("00", $leadZeroBytes) . $hex);
 
         if (true === $this->options["check"]) {
-            $hash = hash("sha256", substr($decoded, 0, -4), true);
+            $hash = substr($decoded, 0, -(Base58::CHECKSUM_SIZE));
             $hash = hash("sha256", $hash, true);
-            $checksum = substr($hash, 0, 4);
+            $hash = hash("sha256", $hash, true);
+            $checksum = substr($hash, 0, Base58::CHECKSUM_SIZE);
 
-            if (0 !== substr_compare($decoded, $checksum, -4, 4)) {
+            if (0 !== substr_compare($decoded, $checksum, -(Base58::CHECKSUM_SIZE))) {
                 $message = sprintf(
                     'Checksum "%s" does not match the expected "%s"',
-                    bin2hex(substr($decoded, -4)),
+                    bin2hex(substr($decoded, -(Base58::CHECKSUM_SIZE))),
                     bin2hex($checksum)
                 );
                 throw new RuntimeException($message);
             }
 
-            $version = substr($decoded, 0, 1);
+            $version = substr($decoded, 0, Base58::VERSION_SIZE);
             $version = ord($version);
 
             if ($version !==  $this->options["version"]) {
@@ -160,7 +161,7 @@ class GmpEncoder
                 throw new RuntimeException($message);
             }
 
-            $decoded = substr($decoded, 1, -4);
+            $decoded = substr($decoded, Base58::VERSION_SIZE, -(Base58::CHECKSUM_SIZE));
         }
 
         return $decoded;
