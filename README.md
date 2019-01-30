@@ -59,6 +59,30 @@ print $default->encode("Hello world!");/* 1LDlk6QWOejX6rPrJ */
 print $bitcoin->encode("Hello world!"); /* 2NEpo7TZRhna7vSvL */
 ```
 
+## Base58Check support
+
+This library supports the [Base58Check](https://en.bitcoin.it/wiki/Base58Check_encoding) encoding used in Bitcoin addresses. Decoding validates both version and the checksum. If either of them fails a `RuntimeException` will be thrown;
+
+```php
+use RuntimeException;
+use Tuupola\Base58;
+
+$base58check = new Base58([
+    "characters" => Base58::BITCOIN,
+    "check" => true,
+    "version" => 0x00
+]);
+
+print $base58check->encode("Hello world!"); /* 19wWTEnNTWna86WmtFsTAr5 */
+
+try {
+    base58check->decode("19wWTEnNTWna86WmtFsTArX");
+} catch (RuntimeException $exception) {
+    /* Checksum "84fec52c" does not match the expected "84fec512" */
+    print $exception->getMessage();
+}
+```
+
 ## Speed
 
 Install GMP if you can. It is much faster pure PHP encoder. Below benchmarks are for encoding `random_bytes(128)` data. BCMatch encoder is also included but it is mostly just a curiosity. It is too slow to be usable.
