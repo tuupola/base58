@@ -32,6 +32,8 @@ class Base58Proxy
 {
     public static $options = [
         "characters" => Base58::GMP,
+        "check" => false,
+        "version" => 0x00,
     ];
 
     /**
