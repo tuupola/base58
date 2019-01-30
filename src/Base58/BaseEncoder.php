@@ -33,6 +33,8 @@ abstract class BaseEncoder
 {
     private $options = [
         "characters" => Base58::GMP,
+        "check" => false,
+        "version" => 0x00,
     ];
 
     public function __construct($options = [])
@@ -53,6 +55,13 @@ abstract class BaseEncoder
         if (is_integer($data) || true === $integer) {
             $data = [$data];
         } else {
+            if (true === $this->options["check"]) {
+                $data = chr($this->options["version"]) . $data;
+                $hash = hash("sha256", $data, true);
+                $hash = hash("sha256", $hash, true);
+                $checksum = substr($hash, 0, 4);
+                $data .= $checksum;
+            }
             $data = str_split($data);
             $data = array_map("ord", $data);
         }

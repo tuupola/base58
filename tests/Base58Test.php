@@ -574,6 +574,43 @@ class Base58Test extends TestCase
         $this->assertEquals("1gbCKFk", $encoded3);
     }
 
+    /* https://en.bitcoin.it/wiki/Technical_background_of_version_1_Bitcoin_addresses */
+    public function testShouldEncodeAndDecodeBitcoinWithCheck()
+    {
+        $options = [
+            "characters" => Base58::BITCOIN,
+            "check" => true,
+            "version" => 0x00,
+        ];
+
+        $data = hex2bin("f54a5851e9372b87810a8e60cdd2e7cfd80b6e31");
+
+        $php = new PhpEncoder($options);
+        $gmp = new GmpEncoder($options);
+        $bcmath = new BcmathEncoder($options);
+        $base58 = new Base58($options);
+
+        $encoded = $php->encode($data);
+        $encoded2 = $gmp->encode($data);
+        $encoded3 = $bcmath->encode($data);
+        $encoded4 = $base58->encode($data);
+
+        Base58Proxy::$options = $options;
+        $encoded5 = Base58Proxy::encode($data);
+
+        $this->assertEquals("1PMycacnJaSqwwJqjawXBErnLsZ7RkXUAs", $encoded);
+        $this->assertEquals("1PMycacnJaSqwwJqjawXBErnLsZ7RkXUAs", $encoded2);
+        $this->assertEquals("1PMycacnJaSqwwJqjawXBErnLsZ7RkXUAs", $encoded3);
+        $this->assertEquals("1PMycacnJaSqwwJqjawXBErnLsZ7RkXUAs", $encoded4);
+        $this->assertEquals("1PMycacnJaSqwwJqjawXBErnLsZ7RkXUAs", $encoded5);
+
+        // $this->assertEquals($data, $php->decode($encoded));
+        // $this->assertEquals($data, $gmp->decode($encoded2));
+        // $this->assertEquals($data, $bcmath->decode($encoded3));
+        // $this->assertEquals($data, $base58->decode($encoded4));
+        // $this->assertEquals($data, Base58Proxy::decode($encoded5));
+    }
+
     public function characterSetProvider()
     {
         return [

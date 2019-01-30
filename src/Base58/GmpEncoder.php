@@ -33,6 +33,8 @@ class GmpEncoder
 {
     private $options = [
         "characters" => Base58::GMP,
+        "check" => false,
+        "version" => 0x00,
     ];
 
     public function __construct($options = [])
@@ -55,6 +57,13 @@ class GmpEncoder
         if (is_integer($data) || true === $integer) {
             $base58 = gmp_strval(gmp_init($data, 10), 58);
         } else {
+            if (true === $this->options["check"]) {
+                $data = chr($this->options["version"]) . $data;
+                $hash = hash("sha256", $data, true);
+                $hash = hash("sha256", $hash, true);
+                $checksum = substr($hash, 0, 4);
+                $data .= $checksum;
+            }
             $hex = bin2hex($data);
 
             $leadZeroBytes = 0;
