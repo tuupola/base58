@@ -34,6 +34,7 @@ SOFTWARE.
 namespace Tuupola\Base58;
 
 use InvalidArgumentException;
+use RuntimeException;
 use Tuupola\Base58;
 use Tuupola\Base58Proxy;
 use PHPUnit\Framework\TestCase;
@@ -576,6 +577,83 @@ class Base58Test extends TestCase
         $this->assertEquals("1gbCKFk", $encoded3);
     }
 
+    /**
+     * @dataProvider bitcoinCheckProvider
+     */
+    public function testShouldEncodeAndDecodeBitcoinWithCheck($hex, $expected)
+    {
+        $options = [
+            "characters" => Base58::BITCOIN,
+            "check" => true,
+            "version" => 0x00,
+        ];
+
+        $data = hex2bin($hex);
+
+        $php = new PhpEncoder($options);
+        $gmp = new GmpEncoder($options);
+        $bcmath = new BcmathEncoder($options);
+        $base58 = new Base58($options);
+
+        $encoded = $php->encode($data);
+        $encoded2 = $gmp->encode($data);
+        $encoded3 = $bcmath->encode($data);
+        $encoded4 = $base58->encode($data);
+
+        Base58Proxy::$options = $options;
+        $encoded5 = Base58Proxy::encode($data);
+
+        $this->assertEquals($expected, $encoded);
+        $this->assertEquals($expected, $encoded2);
+        $this->assertEquals($expected, $encoded3);
+        $this->assertEquals($expected, $encoded4);
+        $this->assertEquals($expected, $encoded5);
+
+        $this->assertEquals($data, $php->decode($encoded));
+        $this->assertEquals($data, $gmp->decode($encoded2));
+        $this->assertEquals($data, $bcmath->decode($encoded3));
+        $this->assertEquals($data, $base58->decode($encoded4));
+        $this->assertEquals($data, Base58Proxy::decode($encoded5));
+    }
+
+    /**
+     * @dataProvider encoderProvider
+     */
+    public function testShouldThrowWithInvalidChecksum($encoder)
+    {
+        $this->expectException(RuntimeException::class);
+
+        $options = [
+            "characters" => Base58::BITCOIN,
+            "check" => true,
+            "version" => 0x00,
+        ];
+
+        //$encoded = "1PMycacnJaSqwwJqjawXBErnLsZ7RkXUAs";
+        $encoded = "1PMycacnJaSqwwJqjawXBErnLsZ7RkXUAS";
+
+        (new $encoder($options))->decode($encoded);
+    }
+
+    /**
+     * @dataProvider encoderProvider
+     */
+    public function testShouldThrowWithInvalidVersion($encoder)
+    {
+        $this->expectException(RuntimeException::class);
+
+        $options = [
+            "characters" => Base58::BITCOIN,
+            "check" => true,
+            "version" => 0x00,
+        ];
+
+        /* This was encoded using version 0x01 */
+        $encoded = "nhabgv51kuimNSvm1GqfN8ZyNp44FGNnC";
+
+        (new $encoder($options))->decode($encoded);
+    }
+
     public function characterSetProvider()
     {
         return [
@@ -585,6 +663,42 @@ class Base58Test extends TestCase
             "Ripple character set" => [Base58::RIPPLE],
             "IPFS character set" => [Base58::IPFS],
             "custom character set" => ["9876543210ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuv"],
+        ];
+    }
+
+    public function encoderProvider()
+    {
+        return [
+            "PHP encoder" => [PhpEncoder::class],
+            "GMP encoder" => [GmpEncoder::class],
+            "BCMath encoder" => [BcmathEncoder::class],
+            "Base encoder" => [Base58::class],
+        ];
+    }
+
+    /* https://en.bitcoin.it/wiki/Technical_background_of_version_1_Bitcoin_addresses */
+    /* https://github.com/luke-jr/libbase58/blob/master/tests/decode-b58c.sh */
+    /* https://github.com/anaskhan96/base58check/blob/master/base58check_test.go */
+    /* https://github.com/dartcoin/base58check/blob/master/test/base58check_test.dart */
+    public function bitcoinCheckProvider()
+    {
+        return [
+            "Data from Bitcoin Wiki" => [
+                "f54a5851e9372b87810a8e60cdd2e7cfd80b6e31",
+                "1PMycacnJaSqwwJqjawXBErnLsZ7RkXUAs"
+            ],
+            "Data from luke-jr/libbase58" => [
+                "5a1fc5dd9e6f03819fca94a2d89669469667f9a0",
+                "19DXstMaV43WpYg4ceREiiTv2UntmoiA9j"
+            ],
+            "Data from anaskhan96/base58check" => [
+                "44d00f6eb2e5491cd7ab7e7185d81b67a23c4980f62b2ed0914d32b7eb1c5581",
+                "1XJjHG4gLiJfxrx82yPFWC8tu8cxKvaQjZNvVfSrsfiX4mbUsw"
+            ],
+            "Data from dartcoin/base58check" => [
+                "65a16059864a2fdbc7c99a4723a8395bc6f188eb",
+                "1AGNa15ZQXAZUgFiqJ2i7Z2DPU2J6hW62i"
+            ]
         ];
     }
 }
