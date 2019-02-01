@@ -57,14 +57,6 @@ class GmpEncoder
      */
     public function encode(string $data): string
     {
-        $hex = bin2hex($data);
-
-        $leadZeroBytes = 0;
-        while ("" !== $hex && 0 === strpos($hex, "00")) {
-            $leadZeroBytes++;
-            $hex = substr($hex, 2);
-        }
-
         if (true === $this->options["check"]) {
             $data = chr($this->options["version"]) . $data;
             $hash = hash("sha256", $data, true);
@@ -78,11 +70,6 @@ class GmpEncoder
         while ("" !== $hex && 0 === strpos($hex, "00")) {
             $leadZeroBytes++;
             $hex = substr($hex, 2);
-        }
-
-        /* Prior to PHP 7.0 substr() returns false instead of the empty string. */
-        if (false === $hex) {
-            $hex = "";
         }
 
         /* gmp_init() cannot cope with a zero-length string. */
