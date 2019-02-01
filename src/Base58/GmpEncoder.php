@@ -65,36 +65,31 @@ class GmpEncoder
             $hex = substr($hex, 2);
         }
 
+        if (true === $this->options["check"]) {
+            $data = chr($this->options["version"]) . $data;
+            $hash = hash("sha256", $data, true);
+            $hash = hash("sha256", $hash, true);
+            $checksum = substr($hash, 0, Base58::CHECKSUM_SIZE);
+            $data .= $checksum;
+        }
+        $hex = bin2hex($data);
+
+        $leadZeroBytes = 0;
+        while ("" !== $hex && 0 === strpos($hex, "00")) {
+            $leadZeroBytes++;
+            $hex = substr($hex, 2);
+        }
+
+        /* Prior to PHP 7.0 substr() returns false instead of the empty string. */
+        if (false === $hex) {
+            $hex = "";
+        }
+
         /* gmp_init() cannot cope with a zero-length string. */
         if ("" === $hex) {
             $base58 = str_repeat(Base58::GMP[0], $leadZeroBytes);
         } else {
-            if (true === $this->options["check"]) {
-                $data = chr($this->options["version"]) . $data;
-                $hash = hash("sha256", $data, true);
-                $hash = hash("sha256", $hash, true);
-                $checksum = substr($hash, 0, Base58::CHECKSUM_SIZE);
-                $data .= $checksum;
-            }
-            $hex = bin2hex($data);
-
-            $leadZeroBytes = 0;
-            while ("" !== $hex && 0 === strpos($hex, "00")) {
-                $leadZeroBytes++;
-                $hex = substr($hex, 2);
-            }
-
-            /* Prior to PHP 7.0 substr() returns false instead of the empty string. */
-            if (false === $hex) {
-                $hex = "";
-            }
-
-            /* gmp_init() cannot cope with a zero-length string. */
-            if ("" === $hex) {
-                $base58 = str_repeat(Base58::GMP[0], $leadZeroBytes);
-            } else {
-                $base58 = str_repeat(Base58::GMP[0], $leadZeroBytes) . gmp_strval(gmp_init($hex, 16), 58);
-            }
+            $base58 = str_repeat(Base58::GMP[0], $leadZeroBytes) . gmp_strval(gmp_init($hex, 16), 58);
         }
 
         if (Base58::GMP === $this->options["characters"]) {
