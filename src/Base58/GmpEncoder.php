@@ -112,7 +112,7 @@ class GmpEncoder
             $hex = "0" . $hex;
         }
 
-        $decoded = hex2bin(str_repeat("00", $leadZeroBytes) . $hex);
+        $decoded = (string) hex2bin(str_repeat("00", $leadZeroBytes) . $hex);
 
         if (true === $this->options["check"]) {
             $hash = substr($decoded, 0, -(Base58::CHECKSUM_SIZE));
