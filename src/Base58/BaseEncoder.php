@@ -29,12 +29,15 @@ SOFTWARE.
 namespace Tuupola\Base58;
 
 use InvalidArgumentException;
+use RuntimeException;
 use Tuupola\Base58;
 
 abstract class BaseEncoder
 {
     private $options = [
         "characters" => Base58::GMP,
+        "check" => false,
+        "version" => 0x00,
     ];
 
     public function __construct(array $options = [])
@@ -52,6 +55,14 @@ abstract class BaseEncoder
      */
     public function encode(string $data): string
     {
+        if (true === $this->options["check"]) {
+            $data = chr($this->options["version"]) . $data;
+            $hash = hash("sha256", $data, true);
+            $hash = hash("sha256", $hash, true);
+            $checksum = substr($hash, 0, 4);
+            $data .= $checksum;
+        }
+
         $data = str_split($data);
         $data = array_map("ord", $data);
 
@@ -102,7 +113,37 @@ abstract class BaseEncoder
             );
         }
 
-        return implode("", array_map("chr", $converted));
+        $decoded = implode("", array_map("chr", $converted));
+        if (true === $this->options["check"]) {
+            $hash = substr($decoded, 0, -(Base58::CHECKSUM_SIZE));
+            $hash = hash("sha256", $hash, true);
+            $hash = hash("sha256", $hash, true);
+            $checksum = substr($hash, 0, Base58::CHECKSUM_SIZE);
+
+            if (0 !== substr_compare($decoded, $checksum, -(Base58::CHECKSUM_SIZE))) {
+                $message = sprintf(
+                    'Checksum "%s" does not match the expected "%s"',
+                    bin2hex(substr($decoded, -(Base58::CHECKSUM_SIZE))),
+                    bin2hex($checksum)
+                );
+                throw new RuntimeException($message);
+            }
+
+            $version = substr($decoded, 0, Base58::VERSION_SIZE);
+            $version = ord($version);
+
+            if ($version !==  $this->options["version"]) {
+                $message = sprintf(
+                    'Version "%s" does not match the expected "%s"',
+                    $version,
+                    $this->options["version"]
+                );
+                throw new RuntimeException($message);
+            }
+
+            $decoded = substr($decoded, Base58::VERSION_SIZE, -(Base58::CHECKSUM_SIZE));
+        }
+        return $decoded;
     }
 
     /**

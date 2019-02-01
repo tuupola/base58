@@ -36,6 +36,9 @@ class Base58
     const RIPPLE = "rpshnaf39wBUDNEGHJKLM4PQRST7VWXYZ2bcdeCg65jkm8oFqi1tuvAxyz";
     const IPFS = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
 
+    const VERSION_SIZE = 1;
+    const CHECKSUM_SIZE = 4;
+
     private $encoder;
     private $options = [];
 
