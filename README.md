@@ -64,7 +64,6 @@ print $bitcoin->encode("Hello world!"); /* 2NEpo7TZRhna7vSvL */
 This library supports the [Base58Check](https://en.bitcoin.it/wiki/Base58Check_encoding) encoding used in Bitcoin addresses. Decoding validates both version and the checksum. If either of them fails a `RuntimeException` will be thrown;
 
 ```php
-use RuntimeException;
 use Tuupola\Base58;
 
 $base58check = new Base58([
