@@ -53,15 +53,15 @@ By default Base58 uses GMP style character set. Shortcuts are provided for [Bitc
 ```php
 use Tuupola\Base58;
 
-print Base58:GMP /* 0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuv */
-print Base58:BITCOIN /* 123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz */
-print Base58:FLICKR /* 123456789abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ */
-print Base58:RIPPLE /* rpshnaf39wBUDNEGHJKLM4PQRST7VWXYZ2bcdeCg65jkm8oFqi1tuvAxyz */
-print Base58:IPFS /* 123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz */
+print Base58::GMP /* 0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuv */
+print Base58::BITCOIN /* 123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz */
+print Base58::FLICKR /* 123456789abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ */
+print Base58::RIPPLE /* rpshnaf39wBUDNEGHJKLM4PQRST7VWXYZ2bcdeCg65jkm8oFqi1tuvAxyz */
+print Base58::IPFS /* 123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz */
 
-$default = new Base58(["characters" => Base58:GMP]);
-$bitcoin = new Base58(["characters" => Base58:BITCOIN]);
-print $default->encode("Hello world!");/* 1LDlk6QWOejX6rPrJ */
+$default = new Base58(["characters" => Base58::GMP]);
+$bitcoin = new Base58(["characters" => Base58::BITCOIN]);
+print $default->encode("Hello world!"); /* 1LDlk6QWOejX6rPrJ */
 print $bitcoin->encode("Hello world!"); /* 2NEpo7TZRhna7vSvL */
 ```
 
@@ -81,7 +81,7 @@ $base58check = new Base58([
 print $base58check->encode("Hello world!"); /* 19wWTEnNTWna86WmtFsTAr5 */
 
 try {
-    base58check->decode("19wWTEnNTWna86WmtFsTArX");
+    $base58check->decode("19wWTEnNTWna86WmtFsTArX");
 } catch (RuntimeException $exception) {
     /* Checksum "84fec52c" does not match the expected "84fec512" */
     print $exception->getMessage();
