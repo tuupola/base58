@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
+## [2.0.1](https://github.com/tuupola/base58/compare/2.0.0...2.0.1) - 2020-08-18
+
+### Fixed
+- Automatic encoder selection ignored the `GmpEncoder` ([#10](https://github.com/tuupola/base58/issues/10), [#11](https://github.com/tuupola/base58/pull/11))
+
 ## [2.0.0](https://github.com/tuupola/base58/compare/1.0.0...2.0.0) - 2019-03-31
 
 ### Changed
