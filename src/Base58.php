@@ -39,14 +39,7 @@ class Base58
     const VERSION_SIZE = 1;
     const CHECKSUM_SIZE = 4;
 
-    /**
-     * @var Base58\GmpEncoder|Base58\PhpEncoder|Base58\BcmathEncoder
-     */
     private $encoder;
-
-    /**
-     * @var mixed[]
-     */
     private $options = [];
 
     public function __construct(array $options = [])

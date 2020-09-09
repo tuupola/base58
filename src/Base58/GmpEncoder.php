@@ -34,9 +34,6 @@ use Tuupola\Base58;
 
 class GmpEncoder
 {
-    /**
-     * @var mixed[]
-     */
     private $options = [
         "characters" => Base58::GMP,
         "check" => false,

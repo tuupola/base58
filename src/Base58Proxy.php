@@ -32,9 +32,6 @@ use Tuupola\Base58;
 
 class Base58Proxy
 {
-    /**
-     * @var mixed[]
-     */
     public static $options = [
         "characters" => Base58::GMP,
         "check" => false,

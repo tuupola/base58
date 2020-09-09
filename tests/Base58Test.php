@@ -41,7 +41,7 @@ use PHPUnit\Framework\TestCase;
 
 class Base58Test extends TestCase
 {
-    protected function tearDown(): void
+    protected function tearDown()
     {
         Base58Proxy::$options = [
             "characters" => Base58::GMP,
