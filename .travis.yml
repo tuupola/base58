@@ -5,15 +5,22 @@ php:
     - 7.2
     - 7.3
     - 7.4
-    - nightly
-
-matrix:
+jobs:
+    fast_finish: true
+    include:
+    - php: nightly
+      env: COMPOSER_ARGS="--no-interaction --ignore-platform-reqs"
     allow_failures:
         - php: nightly
 
+env:
+    global:
+        - COMPOSER_ARGS="--no-interaction"
+
 before_script:
     - travis_retry composer self-update
-    - travis_retry composer install --no-interaction
+    - if [[ $TRAVIS_PHP_VERSION == "nightly" ]]; then composer remove --dev $COMPOSER_ARGS phpbench/phpbench; fi
+    - travis_retry composer update $COMPOSER_ARGS
 
 script:
     - make travis

@@ -2,4 +2,5 @@
 /report/
 composer.lock
 .phplint-cache
+.phpunit.result.cache
 coverage.xml
