@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
-## [2.1.0](https://github.com/tuupola/base58/compare/2.0.1...2.1.0) - unreleased
+## [2.1.0](https://github.com/tuupola/base58/compare/2.0.1...2.1.0) - 2020-09-09
 
 ### Added
 - Allow installing with PHP 8 ([#13](https://github.com/tuupola/base58/issues/13)).
