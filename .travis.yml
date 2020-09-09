@@ -19,7 +19,7 @@ env:
 
 before_script:
     - travis_retry composer self-update
-    - if [[ $TRAVIS_PHP_VERSION == "nightly" ]]; then composer remove --dev phpbench/phpbench; fi
+    - if [[ $TRAVIS_PHP_VERSION == "nightly" ]]; then composer remove --dev $COMPOSER_ARGS phpbench/phpbench; fi
     - travis_retry composer update $COMPOSER_ARGS
 
 script:
