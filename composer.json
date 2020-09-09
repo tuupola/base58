@@ -35,6 +35,6 @@
         "phpunit/phpunit": "^7.0|^8.0|^9.0",
         "phpbench/phpbench": "^0.13.0",
         "overtrue/phplint": "^1.0.0",
-        "phpstan/phpstan": "^0.11.1"
+        "phpstan/phpstan": "^0.12.42"
     }
 }
