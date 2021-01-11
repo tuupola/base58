@@ -30,8 +30,6 @@ watch: vendor
 
 test: lint unit static
 
-travis: lint unit static
-
 clean:
 	rm -rf vendor
 	rm composer.lock
