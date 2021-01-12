@@ -48,6 +48,7 @@ class GmpEncoder
         $this->options = array_merge($this->options, (array) $options);
 
         $uniques = count_chars($this->options["characters"], 3);
+        /** @phpstan-ignore-next-line */
         if (58 !== strlen($uniques) || 58 !== strlen($this->options["characters"])) {
             throw new InvalidArgumentException(
                 "Character set must contain 58 unique characters"
@@ -191,6 +192,7 @@ class GmpEncoder
             $invalid = str_replace($valid, "", $data);
             $invalid = count_chars($invalid, 3);
             throw new InvalidArgumentException(
+                /** @phpstan-ignore-next-line */
                 "Data contains invalid characters \"{$invalid}\""
             );
         }
