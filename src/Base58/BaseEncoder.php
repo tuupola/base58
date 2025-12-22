@@ -177,7 +177,7 @@ abstract class BaseEncoder
         }, $data);
 
         $converted = $this->baseConvert($data, 58, 10);
-        return (integer) implode("", $converted);
+        return (int) implode("", $converted);
     }
 
     private function validateInput(string $data): void
