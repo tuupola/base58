@@ -56,6 +56,40 @@ class Base58Test extends TestCase
     /**
      * @dataProvider characterSetProvider
      */
+    public function testShouldEncodeAndDecodeEmptyString($characters)
+    {
+        $data = "";
+
+        $php = new PhpEncoder(["characters" => $characters]);
+        $gmp = new GmpEncoder(["characters" => $characters]);
+        $bcmath = new BcmathEncoder(["characters" => $characters]);
+        $base58 = new Base58(["characters" => $characters]);
+
+        $encoded = $php->encode($data);
+        $encoded2 = $gmp->encode($data);
+        $encoded3 = $bcmath->encode($data);
+        $encoded4 = $base58->encode($data);
+
+        Base58Proxy::$options = [
+            "characters" => $characters,
+        ];
+        $encoded5 = Base58Proxy::encode($data);
+
+        $this->assertEquals($encoded2, $encoded);
+        $this->assertEquals($encoded3, $encoded);
+        $this->assertEquals($encoded4, $encoded);
+        $this->assertEquals($encoded5, $encoded);
+
+        $this->assertEquals($data, $php->decode($encoded));
+        $this->assertEquals($data, $gmp->decode($encoded2));
+        $this->assertEquals($data, $bcmath->decode($encoded3));
+        $this->assertEquals($data, $base58->decode($encoded4));
+        $this->assertEquals($data, Base58Proxy::decode($encoded5));
+    }
+
+    /**
+     * @dataProvider characterSetProvider
+     */
     public function testShouldEncodeAndDecodeRandomBytes($characters)
     {
         $data = random_bytes(128);
