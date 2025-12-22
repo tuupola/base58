@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 /*
 
-Copyright (c) 2017-2021 Mika Tuupola
+Copyright (c) 2017-2025 Mika Tuupola
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -591,6 +591,41 @@ class Base58Test extends TestCase
         $this->assertEquals("1gbCKFk", $encoded);
         $this->assertEquals("1gbCKFk", $encoded2);
         $this->assertEquals("1gbCKFk", $encoded3);
+    }
+
+    public function testShouldEncodeAndDecodeEmptyStringWithCheck()
+    {
+        $options = [
+            "characters" => Base58::BITCOIN,
+            "check" => true,
+            "version" => 0x00,
+        ];
+
+        $data = "";
+
+        $php = new PhpEncoder($options);
+        $gmp = new GmpEncoder($options);
+        $bcmath = new BcmathEncoder($options);
+        $base58 = new Base58($options);
+
+        $encoded = $php->encode($data);
+        $encoded2 = $gmp->encode($data);
+        $encoded3 = $bcmath->encode($data);
+        $encoded4 = $base58->encode($data);
+
+        Base58Proxy::$options = $options;
+        $encoded5 = Base58Proxy::encode($data);
+
+        $this->assertEquals($encoded2, $encoded);
+        $this->assertEquals($encoded3, $encoded);
+        $this->assertEquals($encoded4, $encoded);
+        $this->assertEquals($encoded5, $encoded);
+
+        $this->assertEquals($data, $php->decode($encoded));
+        $this->assertEquals($data, $gmp->decode($encoded2));
+        $this->assertEquals($data, $bcmath->decode($encoded3));
+        $this->assertEquals($data, $base58->decode($encoded4));
+        $this->assertEquals($data, Base58Proxy::decode($encoded5));
     }
 
     /**
