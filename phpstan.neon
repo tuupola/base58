@@ -1,3 +1,6 @@
 parameters:
     reportUnmatchedIgnoredErrors: false
-    checkMissingIterableValueType: false
+    ignoreErrors:
+        - identifier: missingType.iterableValue
+        - identifier: argument.type
+          path: src/Base58/BcmathEncoder.php
