@@ -601,6 +601,7 @@ class Base58Test extends TestCase
         ];
 
         $data = "";
+        $expected = "1Wh4bh";
 
         $php = new PhpEncoder($options);
         $gmp = new GmpEncoder($options);
@@ -615,10 +616,11 @@ class Base58Test extends TestCase
         Base58Proxy::$options = $options;
         $encoded5 = Base58Proxy::encode($data);
 
-        $this->assertEquals($encoded2, $encoded);
-        $this->assertEquals($encoded3, $encoded);
-        $this->assertEquals($encoded4, $encoded);
-        $this->assertEquals($encoded5, $encoded);
+        $this->assertEquals($encoded, $expected);
+        $this->assertEquals($encoded2, $expected);
+        $this->assertEquals($encoded3, $expected);
+        $this->assertEquals($encoded4, $expected);
+        $this->assertEquals($encoded5, $expected);
 
         $this->assertEquals($data, $php->decode($encoded));
         $this->assertEquals($data, $gmp->decode($encoded2));

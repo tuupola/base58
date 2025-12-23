@@ -6,7 +6,7 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Changed
 
-- PHP 7.2 is not the minimum requirement ([#18](https://github.com/tuupola/base58/pull/18))
+- PHP 7.2 is now the minimum requirement ([#18](https://github.com/tuupola/base58/pull/18))
 
 ### Fixed
 
