@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 /*
 
-Copyright (c) 2017-2021 Mika Tuupola
+Copyright (c) 2017-2025 Mika Tuupola
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -56,6 +56,40 @@ class Base58Test extends TestCase
     /**
      * @dataProvider characterSetProvider
      */
+    public function testShouldEncodeAndDecodeEmptyString($characters)
+    {
+        $data = "";
+
+        $php = new PhpEncoder(["characters" => $characters]);
+        $gmp = new GmpEncoder(["characters" => $characters]);
+        $bcmath = new BcmathEncoder(["characters" => $characters]);
+        $base58 = new Base58(["characters" => $characters]);
+
+        $encoded = $php->encode($data);
+        $encoded2 = $gmp->encode($data);
+        $encoded3 = $bcmath->encode($data);
+        $encoded4 = $base58->encode($data);
+
+        Base58Proxy::$options = [
+            "characters" => $characters,
+        ];
+        $encoded5 = Base58Proxy::encode($data);
+
+        $this->assertEquals($encoded2, $encoded);
+        $this->assertEquals($encoded3, $encoded);
+        $this->assertEquals($encoded4, $encoded);
+        $this->assertEquals($encoded5, $encoded);
+
+        $this->assertEquals($data, $php->decode($encoded));
+        $this->assertEquals($data, $gmp->decode($encoded2));
+        $this->assertEquals($data, $bcmath->decode($encoded3));
+        $this->assertEquals($data, $base58->decode($encoded4));
+        $this->assertEquals($data, Base58Proxy::decode($encoded5));
+    }
+
+    /**
+     * @dataProvider characterSetProvider
+     */
     public function testShouldEncodeAndDecodeRandomBytes($characters)
     {
         $data = random_bytes(128);
@@ -85,6 +119,40 @@ class Base58Test extends TestCase
         $this->assertEquals($data, $bcmath->decode($encoded3));
         $this->assertEquals($data, $base58->decode($encoded4));
         $this->assertEquals($data, Base58Proxy::decode($encoded5));
+    }
+
+    /**
+     * @dataProvider characterSetProvider
+     */
+    public function testShouldEncodeAndDecodeZeroInteger($characters)
+    {
+        $data = 0;
+
+        $php = new PhpEncoder(["characters" => $characters]);
+        $gmp = new GmpEncoder(["characters" => $characters]);
+        $bcmath = new BcmathEncoder(["characters" => $characters]);
+        $base58 = new Base58(["characters" => $characters]);
+
+        $encoded = $php->encodeInteger($data);
+        $encoded2 = $gmp->encodeInteger($data);
+        $encoded3 = $bcmath->encodeInteger($data);
+        $encoded4 = $base58->encodeInteger($data);
+
+        Base58Proxy::$options = [
+            "characters" => $characters,
+        ];
+        $encoded5 = Base58Proxy::encodeInteger($data);
+
+        $this->assertEquals($encoded2, $encoded);
+        $this->assertEquals($encoded3, $encoded);
+        $this->assertEquals($encoded4, $encoded);
+        $this->assertEquals($encoded5, $encoded);
+
+        $this->assertEquals($data, $php->decodeInteger($encoded));
+        $this->assertEquals($data, $gmp->decodeInteger($encoded2));
+        $this->assertEquals($data, $bcmath->decodeInteger($encoded3));
+        $this->assertEquals($data, $base58->decodeInteger($encoded4));
+        $this->assertEquals($data, Base58Proxy::decodeInteger($encoded5));
     }
 
     /**
@@ -502,7 +570,7 @@ class Base58Test extends TestCase
         $this->assertEquals($data, Base58Proxy::decode($encoded5));
     }
 
-    public function testBug1()
+    public function testBug1ShouldNotTrimLeadingZeroByte()
     {
         $php = new PhpEncoder(["characters" => Base58::BITCOIN]);
         $gmp = new GmpEncoder(["characters" => Base58::BITCOIN]);
@@ -512,7 +580,6 @@ class Base58Test extends TestCase
         $decoded2 = $gmp->decode("1gbCKFk");
         $decoded3 = $bcmath->decode("1gbCKFk");
 
-        $this->assertEquals($decoded, $decoded);
         $this->assertEquals($decoded, $decoded2);
         $this->assertEquals($decoded, $decoded3);
 
@@ -523,6 +590,41 @@ class Base58Test extends TestCase
         $this->assertEquals("1gbCKFk", $encoded);
         $this->assertEquals("1gbCKFk", $encoded2);
         $this->assertEquals("1gbCKFk", $encoded3);
+    }
+
+    public function testShouldEncodeAndDecodeEmptyStringWithCheck()
+    {
+        $options = [
+            "characters" => Base58::BITCOIN,
+            "check" => true,
+            "version" => 0x00,
+        ];
+
+        $data = "";
+
+        $php = new PhpEncoder($options);
+        $gmp = new GmpEncoder($options);
+        $bcmath = new BcmathEncoder($options);
+        $base58 = new Base58($options);
+
+        $encoded = $php->encode($data);
+        $encoded2 = $gmp->encode($data);
+        $encoded3 = $bcmath->encode($data);
+        $encoded4 = $base58->encode($data);
+
+        Base58Proxy::$options = $options;
+        $encoded5 = Base58Proxy::encode($data);
+
+        $this->assertEquals($encoded2, $encoded);
+        $this->assertEquals($encoded3, $encoded);
+        $this->assertEquals($encoded4, $encoded);
+        $this->assertEquals($encoded5, $encoded);
+
+        $this->assertEquals($data, $php->decode($encoded));
+        $this->assertEquals($data, $gmp->decode($encoded2));
+        $this->assertEquals($data, $bcmath->decode($encoded3));
+        $this->assertEquals($data, $base58->decode($encoded4));
+        $this->assertEquals($data, Base58Proxy::decode($encoded5));
     }
 
     /**
