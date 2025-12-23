@@ -59,6 +59,10 @@ abstract class BaseEncoder
      */
     public function encode(string $data): string
     {
+        if ("" === $data) {
+            return "";
+        }
+
         if (true === $this->options["check"]) {
             $data = chr($this->options["version"]) . $data;
             $hash = hash("sha256", $data, true);
@@ -96,6 +100,10 @@ abstract class BaseEncoder
     public function decode(string $data): string
     {
         $this->validateInput($data);
+
+        if ("" === $data) {
+            return "";
+        }
 
         $data = str_split($data);
         $data = array_map(function ($character) {
