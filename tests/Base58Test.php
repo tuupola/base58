@@ -580,7 +580,6 @@ class Base58Test extends TestCase
         $decoded2 = $gmp->decode("1gbCKFk");
         $decoded3 = $bcmath->decode("1gbCKFk");
 
-        $this->assertEquals($decoded, $decoded);
         $this->assertEquals($decoded, $decoded2);
         $this->assertEquals($decoded, $decoded3);
 
