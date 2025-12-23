@@ -59,16 +59,16 @@ abstract class BaseEncoder
      */
     public function encode(string $data): string
     {
-        if ("" === $data) {
-            return "";
-        }
-
         if (true === $this->options["check"]) {
             $data = chr($this->options["version"]) . $data;
             $hash = hash("sha256", $data, true);
             $hash = hash("sha256", $hash, true);
             $checksum = substr($hash, 0, 4);
             $data .= $checksum;
+        }
+
+        if ("" === $data) {
+            return "";
         }
 
         $data = str_split($data);
