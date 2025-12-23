@@ -67,6 +67,10 @@ abstract class BaseEncoder
             $data .= $checksum;
         }
 
+        if ("" === $data) {
+            return "";
+        }
+
         $data = str_split($data);
         $data = array_map("ord", $data);
 
@@ -96,6 +100,10 @@ abstract class BaseEncoder
     public function decode(string $data): string
     {
         $this->validateInput($data);
+
+        if ("" === $data) {
+            return "";
+        }
 
         $data = str_split($data);
         $data = array_map(function ($character) {

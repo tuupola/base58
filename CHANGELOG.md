@@ -4,7 +4,13 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ## [2.2.0](https://github.com/tuupola/base58/compare/2.1.0...2.x) - Unreleased
 
+### Changed
+
 - PHP 7.2 is not the minimum requirement ([#18](https://github.com/tuupola/base58/pull/18))
+
+### Fixed
+
+- PHP versions before 8.2 were returning wrong value when encoding an empty string ([#20](https://github.com/tuupola/base58/issues/20), [#21](https://github.com/tuupola/base58/pull/21))
 
 ## [2.1.0](https://github.com/tuupola/base58/compare/2.0.1...2.1.0) - 2020-09-09
 
