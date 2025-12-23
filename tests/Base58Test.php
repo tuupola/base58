@@ -570,7 +570,7 @@ class Base58Test extends TestCase
         $this->assertEquals($data, Base58Proxy::decode($encoded5));
     }
 
-    public function testBug1()
+    public function testBug1ShouldNotTrimLeadingZeroByte()
     {
         $php = new PhpEncoder(["characters" => Base58::BITCOIN]);
         $gmp = new GmpEncoder(["characters" => Base58::BITCOIN]);
