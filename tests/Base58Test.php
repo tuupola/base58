@@ -189,6 +189,40 @@ class Base58Test extends TestCase
         $this->assertEquals($data, Base58Proxy::decodeInteger($encoded5));
     }
 
+    /**
+     * @dataProvider characterSetProvider
+     */
+    public function testShouldEncodeAndDecodeNegativeIntegers($characters)
+    {
+        $data = -987654321;
+
+        $php = new PhpEncoder(["characters" => $characters]);
+        $gmp = new GmpEncoder(["characters" => $characters]);
+        $bcmath = new BcmathEncoder(["characters" => $characters]);
+        $base58 = new Base58(["characters" => $characters]);
+
+        $encoded = $php->encodeInteger($data);
+        $encoded2 = $gmp->encodeInteger($data);
+        $encoded3 = $bcmath->encodeInteger($data);
+        $encoded4 = $base58->encodeInteger($data);
+
+        Base58Proxy::$options = [
+            "characters" => $characters,
+        ];
+        $encoded5 = Base58Proxy::encodeInteger($data);
+
+        $this->assertEquals($encoded2, $encoded);
+        $this->assertEquals($encoded3, $encoded);
+        $this->assertEquals($encoded4, $encoded);
+        $this->assertEquals($encoded5, $encoded);
+
+        $this->assertEquals($data, $php->decodeInteger($encoded));
+        $this->assertEquals($data, $gmp->decodeInteger($encoded2));
+        $this->assertEquals($data, $bcmath->decodeInteger($encoded3));
+        $this->assertEquals($data, $base58->decodeInteger($encoded4));
+        $this->assertEquals($data, Base58Proxy::decodeInteger($encoded5));
+    }
+
     public function testShouldAutoSelectEncoder()
     {
         $data = random_bytes(128);
