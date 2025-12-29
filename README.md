@@ -4,7 +4,8 @@ This library implements Base58 encoding. In addition to integers it can encode a
 
 [![Latest Version](https://img.shields.io/packagist/v/tuupola/base58.svg?style=flat-square)](https://packagist.org/packages/tuupola/base58)
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
-[![Build Status](https://img.shields.io/github/workflow/status/tuupola/base58/Tests/2.x?style=flat-square)](https://github.com/tuupola/base58/actions)[![Coverage](https://img.shields.io/codecov/c/github/tuupola/base58.svg?style=flat-square)](https://codecov.io/github/tuupola/base58)
+[![Build Status](https://img.shields.io/github/actions/workflow/status/tuupola/base58/tests.yml?branch=2.x&style=flat-square)](https://github.com/tuupola/base58/actions)
+[![Coverage](https://img.shields.io/codecov/c/github/tuupola/base58.svg?style=flat-square)](https://codecov.io/github/tuupola/base58)
 
 ## Install
 
